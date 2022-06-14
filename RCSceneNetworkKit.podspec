@@ -25,19 +25,19 @@ Pod::Spec.new do |s|
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license      = { :type => "Copyright", :text => "Copyright 2022 RongCloud" }
   s.author           = { '彭蕾' => 'penglei1@rongcloud.cn' }
-  s.source           = { :git => 'git@github.com:rongcloud-community/RCSceneNetworkKit.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@github.com:rongcloud-community/rongcloud-scene-network-kit-ios.git', :tag => s.version.to_s }
 
   s.social_media_url = 'https://www.rongcloud.cn/devcenter'
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'RCSceneNetworkKit/Classes/**/*'
+  s.source_files = 'RCSceneNetworkKit/Classes/*.{h,m}'
   
-  # s.resource_bundles = {
-  #   'RCSceneNetworkKit' => ['RCSceneNetworkKit/Assets/**/*']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.subspec 'Core' do |ss|
+    ss.source_files = 'RCSceneNetworkKit/Classes/Core/**/*'
+  end
+  
+  s.dependency 'AFNetworking'
+  s.dependency 'YYModel'
+  
 end

@@ -7,6 +7,8 @@
 //
 
 #import "RCSViewController.h"
+#import <RCSceneNetworkKit/RCSNetworkKit.h>
+#import "RCSNetworkDataHandler+Login.h"
 
 @interface RCSViewController ()
 
@@ -18,6 +20,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    [RCSNetworkConfig configWithBaseUrl:@""
+                         bussinessToken:@""];
+    
+    
+    [[RCSNetworkDataHandler new] sendCodeWithParams:@{ @"mobile": @"15811111112", @"region": @"+86"} completionBlock:^(RCSResponseModel * _Nonnull model) {
+        NSLog(@"%@", model.description);
+    }];
+    
 }
 
 - (void)didReceiveMemoryWarning
