@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addRequest:(RCSRequest *)request;
 - (void)cancelRequest:(RCSRequest *)request;
+- (void)cancelRequestForTaskId:(NSUInteger )taskId;
 
 @end
 

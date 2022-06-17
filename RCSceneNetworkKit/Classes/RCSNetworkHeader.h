@@ -21,5 +21,6 @@ typedef NS_ENUM(NSUInteger, RCSHTTPRequestMethod) {
 };
 
 typedef void(^RCSNetworkCompletion)(RCSResponseModel * _Nonnull model);
+typedef void(^RCSNetworkProgress)(NSProgress * _Nonnull progress);
 
 #endif /* RCSNetworkHeader_h */

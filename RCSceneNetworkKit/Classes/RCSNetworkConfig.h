@@ -17,23 +17,57 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) RCSHTTPRequestMethod method;
 @property (nonatomic, strong, nullable) NSDictionary *params;
 @property (nonatomic, strong, nullable) NSDictionary *headers;
-@property (nonatomic, assign) BOOL auth;
 
+/// 单个请求配置项
+/// @param url 可传绝对路径，或者相对路径。相对路径请求会全局配置的baseUrl。
+/// @param method 请求方法
+/// @param params 请求参数
 + (instancetype)configWithUrl:(NSString *)url
                        method:(RCSHTTPRequestMethod)method
-                       params:(NSDictionary *)params;
+                       params:(nullable NSDictionary *)params;
 
+/// 单个请求配置项
+/// @param url 可传绝对路径，或者相对路径。相对路径请求会全局配置的baseUrl。
+/// @param rspClassName 请求模型
+/// @code
+/// dada 返回数组，可以传数组元素Model名称
+/// dada 返回字典，可以传字典Model名称
+/// 传空，则 data 按解析数据返回
+/// @endCode
+/// @param method 请求
+/// @param params 请求参数
 + (instancetype)configWithUrl:(NSString *)url
                  rspClassName:(nullable NSString *)rspClassName
                        method:(RCSHTTPRequestMethod)method
-                       params:(NSDictionary *)params;
+                       params:(nullable NSDictionary *)params;
 
+
+/// 单个请求配置项
+/// @param url 可传绝对路径，或者相对路径。相对路径请求会全局配置的baseUrl。
+/// @param rspClassName 请求模型
+/// @code
+/// dada 返回数组，可以传数组元素Model名称
+/// dada 返回字典，可以传字典Model名称
+/// 传空，则 data 按解析数据返回
+/// @endCode
+/// @param method 请求
+/// @param params 请求参数
+/// @param headers 请求头，会覆盖全局配置
 + (instancetype)configWithUrl:(NSString *)url
                  rspClassName:(nullable NSString *)rspClassName
                        method:(RCSHTTPRequestMethod)method
                        params:(nullable NSDictionary *)params
                       headers:(nullable NSDictionary *)headers;
 
+/// 全局配置项
+/// @param baseUrl
+/// @param bussinessToken  从 https://rcrtc-api.rongcloud.net/code 获取
+///  @code 请求头默认配置
+///  {
+///     @"Content-Type":@"application/json",
+///     @"BusinessToken":businessToken,
+///  }
+///  @endCode
 + (void)configWithBaseUrl:(NSString *)baseUrl
            bussinessToken:(NSString *)bussinessToken;
 

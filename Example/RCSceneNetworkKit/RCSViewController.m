@@ -20,15 +20,43 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [RCSNetworkConfig configWithBaseUrl:@""
-                         bussinessToken:@""];
+//    [RCSNetworkConfig configWithBaseUrl:@""
+//                         bussinessToken:@""];
+//
+//
+//    [[RCSNetworkDataHandler new] sendCodeWithParams:@{ @"mobile": @"15811111112", @"region": @"+86"} completionBlock:^(RCSResponseModel * _Nonnull model) {
+//        NSLog(@"%@", model.description);
+//    }];
     
-    
-    [[RCSNetworkDataHandler new] sendCodeWithParams:@{ @"mobile": @"15811111112", @"region": @"+86"} completionBlock:^(RCSResponseModel * _Nonnull model) {
-        NSLog(@"%@", model.description);
-    }];
-    
+
+    [self downloadTest];
 }
+
+- (void)downloadTest {
+    RCSNetworkConfig *config = [RCSNetworkConfig configWithUrl:@"http://vjs.zencdn.net/v/oceans.mp4"
+                                                        method:RCSHTTPRequestMethodGET
+                                                        params:nil];
+    
+    [[RCSNetworkDataHandler new] requestWithUrlConfig:config
+                                         downloadPath:[NSString stringWithFormat:@"%@/22.mp4", [self documentsDirectoryPath]]
+                                     downloadProgress:^(NSProgress * _Nonnull progress) {
+        NSLog(@"----------%@",progress);
+    } completion:^(RCSResponseModel * _Nonnull model) {
+        NSURL *url = model.data;
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        NSLog(@"=====>%ld", data.length);
+    }];
+}
+
+- (NSString *)documentsDirectoryPath {
+    static NSString *documentDirectory = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        documentDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    });
+    return documentDirectory;
+}
+
 
 - (void)didReceiveMemoryWarning
 {

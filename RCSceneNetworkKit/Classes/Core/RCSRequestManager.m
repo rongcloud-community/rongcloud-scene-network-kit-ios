@@ -47,6 +47,11 @@
 }
 
 #pragma mark - public method
+- (void)cancelRequestForTaskId:(NSUInteger )taskId; {
+    RCSRequest *request = [self.requestPool requestForTaskId:taskId];
+    [self cancelRequest:request];
+}
+
 - (void)addRequest:(RCSRequest *)request {
     NSParameterAssert(request != nil);
     
@@ -71,6 +76,21 @@
     AFHTTPRequestSerializer *requestSerializer = [self requestSerializerForRequest:request];
     NSMutableDictionary *requestParams = [self paramsForRequest:request];
     
+    void(^downloadProgressBlock)(NSProgress *downloadProgress) = nil;
+    if (request.progressBlock) {
+        downloadProgressBlock = ^(NSProgress *downloadProgress) {
+            request.progressBlock(request, downloadProgress);
+        };
+    }
+    
+    if (httpMethod == RCSHTTPRequestMethodTypeGET && request.downloadPath) {
+        return [self downloadTaskWithDownloadPath:request.downloadPath
+                                requestSerializer:requestSerializer
+                                        URLString:requestURL
+                                       parameters:requestParams
+                                         progress:downloadProgressBlock
+                                            error:error];
+    }
     
     NSString *httpMethodStr = [self httpMethodStr:httpMethod];
     if (httpMethodStr) {
@@ -81,6 +101,50 @@
                                       error:error];
     }
     return nil;
+}
+
+- (NSURLSessionDownloadTask *)downloadTaskWithDownloadPath:(NSString *)downloadPath
+                                         requestSerializer:(AFHTTPRequestSerializer *)requestSerializer
+                                                 URLString:(NSString *)URLString
+                                                parameters:(id)parameters
+                                                  progress:(void (^)(NSProgress *downloadProgress))progressBlock
+                                                     error:(NSError * _Nullable __autoreleasing *)error {
+    
+    NSMutableURLRequest *urlRequest = [requestSerializer requestWithMethod:@"GET"
+                                                                 URLString:URLString
+                                                                parameters:parameters
+                                                                     error:error];
+    
+    NSString *downloadTargetPath;
+    BOOL isDirectory;
+    if(![[NSFileManager defaultManager] fileExistsAtPath:downloadPath isDirectory:&isDirectory]) {
+        isDirectory = NO;
+    }
+    
+    if (isDirectory) {
+        NSString *fileName = [urlRequest.URL lastPathComponent];
+        downloadTargetPath = [NSString pathWithComponents:@[downloadPath, fileName]];
+    } else {
+        downloadTargetPath = downloadPath;
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadTargetPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:downloadTargetPath error:nil];
+    }
+    
+    __block NSURLSessionDownloadTask *downloadTask = nil;
+    downloadTask = [_sessionManager downloadTaskWithRequest:urlRequest
+                                                   progress:progressBlock
+                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        return [NSURL fileURLWithPath:downloadTargetPath isDirectory:NO];
+    } completionHandler:^(NSURLResponse *response,
+                          NSURL *filePath,
+                          NSError *error) {
+        [self handleRequestResult:downloadTask
+                   responseObject:filePath
+                            error:error];
+    }];
+    return downloadTask;
 }
 
 - (AFHTTPRequestSerializer *)requestSerializerForRequest:(RCSRequest *)request {
@@ -214,9 +278,14 @@
 }
 
 - (void)serializeResponseForRequest:(RCSRequest *)request {
-
+    
     if (request.responseSerializerType != RCSResponseSerializerTypeJSON) {
         !request.successBlock ?: request.successBlock(request, request.responseData);
+        return ;
+    }
+    
+    if (request.downloadPath != nil) {
+        !request.successBlock ?: request.successBlock(request, request.responseObject);
         return ;
     }
     

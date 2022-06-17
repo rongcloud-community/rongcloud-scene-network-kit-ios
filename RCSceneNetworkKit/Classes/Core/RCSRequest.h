@@ -42,6 +42,7 @@ typedef NS_ENUM(NSUInteger, RCSResponseSerializerType) {
 
 typedef void(^RCSRequestSuccessBlock)(RCSRequest * _Nonnull request, id _Nullable responseObject);
 typedef void(^RCSRequestFailBlock)(RCSRequest * _Nonnull request,  NSError * _Nullable error);
+typedef void(^RCSRequestProgressBlock)(RCSRequest * _Nonnull request, NSProgress * _Nonnull progress);
 
 #pragma mark - Request Configuration
 
@@ -94,14 +95,21 @@ typedef void(^RCSRequestFailBlock)(RCSRequest * _Nonnull request,  NSError * _Nu
  */
 @property (nonatomic, strong, nullable) NSString *responseModelClassName;
 
+/**
+ 下载路径
+ */
+@property (nonatomic, strong) NSString * _Nonnull downloadPath;
+
 
 #pragma mark - Callback
 
 /**
  网络请求处理完成的回调
  */
-@property (nonatomic, copy, nullable) RCSRequestSuccessBlock successBlock;
-@property (nonatomic, copy, nullable) RCSRequestFailBlock failBlock;
+@property (nonatomic, strong, nullable) RCSRequestSuccessBlock successBlock;
+@property (nonatomic, strong, nullable) RCSRequestFailBlock failBlock;
+@property (nonatomic, strong, nullable) RCSRequestProgressBlock progressBlock;
+
 
 #pragma mark - Request Information
 @property (nonatomic, strong, nullable) NSURLSessionTask *sessionTask;
@@ -124,8 +132,10 @@ typedef void(^RCSRequestFailBlock)(RCSRequest * _Nonnull request,  NSError * _Nu
 
 /**
  将当前请求加入到请求队列当中，并开始请求。
+ @return 返回请求标识self.sessionTask.taskIdentifier
+ return an identifier for request task, assigned by and unique to the owning session
  */
-- (void)start;
+- (NSUInteger)start;
 
 /**
  从请求队列中删除当前请求，并取消请求。
@@ -134,9 +144,20 @@ typedef void(^RCSRequestFailBlock)(RCSRequest * _Nonnull request,  NSError * _Nu
 
 /**
  使用callback回调的快捷开始请求的方法。
+ @return 返回请求标识self.sessionTask.taskIdentifier
+ return an identifier for request task, assigned by and unique to the owning session
  */
-- (void)startWithSuccessBlock:(RCSRequestSuccessBlock _Nullable)success
-                    failBlock:(RCSRequestFailBlock _Nullable)fail;
+- (NSUInteger)startWithProgressBlock:(RCSRequestProgressBlock _Nullable)process
+                       successBlock:(RCSRequestSuccessBlock _Nullable)success
+                          failBlock:(RCSRequestFailBlock _Nullable)fail;
+
+/**
+ 使用callback回调的快捷开始请求的方法。
+ @return 返回请求标识self.sessionTask.taskIdentifier
+ return an identifier for request task, assigned by and unique to the owning session
+ */
+- (NSUInteger)startWithSuccessBlock:(RCSRequestSuccessBlock _Nullable)success
+                          failBlock:(RCSRequestFailBlock _Nullable)fail;
 
 @end
 
