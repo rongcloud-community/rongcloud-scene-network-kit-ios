@@ -68,7 +68,6 @@
     RCSRequest *request = [RCSRequest new];
     request.requestURL = urlConfig.url;
     request.httpMethod = RCSHTTPRequestMethodTypeGET;
-    request.requestParams = urlConfig.params;
     request.downloadPath = downloadPath;
 
     return [request startWithProgressBlock:^(RCSRequest * _Nonnull request, NSProgress * _Nonnull progress) {

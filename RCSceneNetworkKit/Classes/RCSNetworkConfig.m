@@ -47,6 +47,12 @@
 
 #pragma mark - 网络设置
 + (void)configWithBaseUrl:(NSString *)baseUrl bussinessToken:(NSString *)bussinessToken {
+    [self configGlobalWithBaseUrl:baseUrl bussinessToken:bussinessToken auth:nil];
+}
+
++ (void)configGlobalWithBaseUrl:(NSString *)baseUrl
+                 bussinessToken:(NSString *)bussinessToken
+                           auth:(nullable NSString *)auth {
     RCSNetworkGlobalConfig *globalConfig = [RCSNetworkGlobalConfig shared];
 
     globalConfig.baseURL = ^NSString * _Nonnull{
@@ -57,10 +63,20 @@
         if (businessToken == nil || businessToken.length == 0) {
             NSCAssert(NO, @"当前 BusinessToken 不存在或者为空，请前往 https://rcrtc-api.rongcloud.net/code 获取 BusinessToken");
         }
+        
+        if (auth.length == 0) {
+            return @{
+                @"Content-Type":@"application/json",
+                @"BusinessToken":businessToken,
+            };
+        }
+        
         return @{
             @"Content-Type":@"application/json",
             @"BusinessToken":businessToken,
+            @"Authorization":auth,
         };
+        
     };
 }
 

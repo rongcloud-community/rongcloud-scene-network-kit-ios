@@ -134,8 +134,11 @@
     
     __block NSURLSessionDownloadTask *downloadTask = nil;
     downloadTask = [_sessionManager downloadTaskWithRequest:urlRequest
-                                                   progress:progressBlock
-                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                                                   progress:^(NSProgress * _Nonnull downloadProgress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            !progressBlock ?: progressBlock(downloadProgress);
+        });
+    } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         return [NSURL fileURLWithPath:downloadTargetPath isDirectory:NO];
     } completionHandler:^(NSURLResponse *response,
                           NSURL *filePath,
@@ -161,6 +164,11 @@
         } else {
             requestSerializer = [AFHTTPRequestSerializer serializer];
         }
+    }
+    
+    /// 下载则不设置header 和 超时时间
+    if (request.httpMethod == RCSHTTPRequestMethodTypeGET && request.downloadPath) {
+        return requestSerializer;
     }
     
     // 设置超时时间
