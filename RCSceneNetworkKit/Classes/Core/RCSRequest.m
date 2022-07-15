@@ -23,7 +23,7 @@
     if (self) {
         _httpMethod             = RCSHTTPRequestMethodTypeGET;
         _timeoutInterval        = 60.0;
-        _requestSerializerType  = RCSRequestSerializerTypeHTTP;
+        _requestSerializerType  = RCSRequestSerializerTypeJSON;
         _responseSerializerType = RCSResponseSerializerTypeJSON;
     }
     return self;

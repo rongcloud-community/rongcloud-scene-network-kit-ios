@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 全局网络配置
 /// 全局配置项
-/// @param baseUrl
+/// @param baseUrl 服务器地址
 /// @param bussinessToken  从 https://rcrtc-api.rongcloud.net/code 获取
 ///  @code 请求头默认配置
 ///  {

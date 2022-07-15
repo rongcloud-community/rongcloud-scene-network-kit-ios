@@ -71,7 +71,7 @@ typedef void(^RCSRequestProgressBlock)(RCSRequest * _Nonnull request, NSProgress
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 
 /**
- 网络请求序列化类型，默认为RCSRequestSerializerTypeHTTP
+ 网络请求序列化类型，默认为RCSRequestSerializerTypeJson
  */
 @property (nonatomic, assign, readonly) RCSRequestSerializerType requestSerializerType;
 
