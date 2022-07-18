@@ -38,6 +38,7 @@
             break;
         case RCSHTTPRequestMethodPATCH:
             request.httpMethod = RCSHTTPRequestMethodTypePATCH;
+            break;
         default:
             request.httpMethod = RCSHTTPRequestMethodTypeGET;
             break;

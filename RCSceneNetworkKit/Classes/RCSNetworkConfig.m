@@ -62,6 +62,7 @@
         NSString *businessToken = bussinessToken;
         if (businessToken == nil || businessToken.length == 0) {
             NSCAssert(NO, @"当前 BusinessToken 不存在或者为空，请前往 https://rcrtc-api.rongcloud.net/code 获取 BusinessToken");
+            return @{@"Content-Type":@"application/json"};
         }
         
         if (auth.length == 0) {
