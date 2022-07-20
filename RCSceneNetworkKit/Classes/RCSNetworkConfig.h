@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///  }
 ///  @endCode
 + (void)configWithBaseUrl:(NSString *)baseUrl
-             businesToken:(nullable NSString *)businessToken
+             businessToken:(nullable NSString *)businessToken
                      auth:(nullable NSString *)auth;
 
 @end
