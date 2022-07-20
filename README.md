@@ -28,14 +28,13 @@ pod 'RCSceneNetworkKit'
 
 ```Objective-c
 
-	/// 添加全局网络配置
-    [RCSNetworkConfig configWithBaseUrl:@""
-                         bussinessToken:@""];
+/// 可添加全局网络配置
+[RCSNetworkConfig configWithBaseUrl:@"" bussinessToken:@""];
     
-    /// 通过 RCSNetworkDataHandler 实例对象发起请求
-    [[RCSNetworkDataHandler new] sendCodeWithParams:@{} completionBlock:^(RCSResponseModel * _Nonnull model) {
-        NSLog(@"%@", model.description);
-    }];
+/// 通过 RCSNetworkDataHandler 实例对象发起请求
+[[RCSNetworkDataHandler new] sendCodeWithParams:@{} completionBlock:^(RCSResponseModel * _Nonnull model) {
+    NSLog(@"%@", model.description);
+}];
 
 
 
@@ -53,9 +52,19 @@ pod 'RCSceneNetworkKit'
 
 /// 获取登录验证码
 + (RCSNetworkConfig *)sendCodeUrlConfigWith:(NSDictionary *)params {
-    return [self configWithUrl:@"user/sendCode"
+    return [self configWithUrl:[[RCSLoginConfig baseUrl] stringByAppendingPathComponent:@"user/sendCode"]
+                  rspClassName:nil
                         method:RCSHTTPRequestMethodPOST
-                        params:params];
+                        params:params
+                       headers:[self login_commonHeaders]];
+}
+
++ (NSDictionary *)login_commonHeaders{
+    NSMutableDictionary *header = @{@"Content-Type":@"application/json"}.mutableCopy;
+    if ([RCSLoginConfig bussinessToken].length != 0) {
+        [header addEntriesFromDictionary:@{@"BusinessToken":[RCSLoginConfig bussinessToken]}];
+    }
+    return header.copy;
 }
 
 @end

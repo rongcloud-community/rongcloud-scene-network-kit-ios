@@ -20,16 +20,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-//    [RCSNetworkConfig configWithBaseUrl:@""
-//                         bussinessToken:@""];
-//
-//
-//    [[RCSNetworkDataHandler new] sendCodeWithParams:@{ @"mobile": @"15811111112", @"region": @"+86"} completionBlock:^(RCSResponseModel * _Nonnull model) {
-//        NSLog(@"%@", model.description);
-//    }];
+    [RCSNetworkConfig configWithBaseUrl:@"https://rcrtc-api.rongcloud.net/"
+                         bussinessToken:@""];
+
+
+    [[RCSNetworkDataHandler new] sendCodeWithParams:@{ @"mobile": @"15811111122", @"region": @"+86"}
+                                    completionBlock:^(RCSResponseModel * _Nonnull model) {
+        NSLog(@"%@", model.description);
+    }];
     
 
-    [self downloadTest];
+//    [self downloadTest];
 }
 
 - (void)downloadTest {
