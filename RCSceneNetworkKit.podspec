@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'RCSceneNetworkKit'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = 'RCSceneNetworkKit of RongCloud Scene.'
 
 # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license      = { :type => "Copyright", :text => "Copyright 2022 RongCloud" }
   s.author           = { '彭蕾' => 'penglei1@rongcloud.cn' }
-  s.source           = { :git => 'git@github.com:rongcloud-community/rongcloud-scene-network-kit-ios.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/rongcloud-community/rongcloud-scene-network-kit-ios.git', :tag => s.version.to_s }
 
   s.social_media_url = 'https://www.rongcloud.cn/devcenter'
 
