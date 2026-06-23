@@ -1,4 +1,11 @@
+> [!WARNING]
+> ⚠️ **暂停维护说明**
+>
+> 该工程已不再维护。
+
 # RCSceneNetworkKit
+
+RCSceneNetworkKit 是融云（RongCloud）场景化 SDK 体系中的 iOS 网络基础层组件，基于 AFNetworking 封装，为体系内各业务模块（登录、KTV 音乐、社区、美颜等）提供统一的 HTTP 请求能力。
 
 [![CI Status](https://img.shields.io/travis/彭蕾/RCSceneNetworkKit.svg?style=flat)](https://travis-ci.org/彭蕾/RCSceneNetworkKit)
 [![Version](https://img.shields.io/cocoapods/v/RCSceneNetworkKit.svg?style=flat)](https://cocoapods.org/pods/RCSceneNetworkKit)
